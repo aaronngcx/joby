@@ -35,6 +35,9 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Create application.properties
         run: |
           cat > src/main/resources/application.properties << EOF
