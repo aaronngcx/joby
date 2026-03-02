@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(properties = "joby.api-key=test-key")
 class JobControllerTest {
 
     @Autowired
@@ -55,6 +57,7 @@ class JobControllerTest {
         );
 
         mockMvc.perform(post("/api/jobs")
+                .header("X-API-KEY", "test-key")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -71,6 +74,7 @@ class JobControllerTest {
         );
 
         mockMvc.perform(post("/api/jobs")
+                .header("X-API-KEY", "test-key")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -84,7 +88,8 @@ class JobControllerTest {
 
         when(jobService.getAllJobs()).thenReturn(List.of(job1, job2));
 
-        mockMvc.perform(get("/api/jobs"))
+        mockMvc.perform(get("/api/jobs")
+                .header("X-API-KEY", "test-key"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].type").value("EMAIL_NOTIFICATION"))
@@ -97,7 +102,8 @@ class JobControllerTest {
 
         when(jobService.getJobsByStatus(JobStatus.PENDING)).thenReturn(List.of(job));
 
-        mockMvc.perform(get("/api/jobs/status/PENDING"))
+        mockMvc.perform(get("/api/jobs/status/PENDING")
+                .header("X-API-KEY", "test-key"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].status").value("PENDING"));

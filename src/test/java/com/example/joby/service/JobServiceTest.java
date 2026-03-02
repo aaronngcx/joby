@@ -1,5 +1,6 @@
 package com.example.joby.service;
 
+import com.example.joby.kafka.JobEventProducer;
 import com.example.joby.model.Job;
 import com.example.joby.model.JobStatus;
 import com.example.joby.repository.JobRepository;
@@ -23,6 +24,9 @@ class JobServiceTest {
 
     @InjectMocks
     private JobService jobService;
+
+    @Mock
+    private JobEventProducer jobEventProducer;
 
     @Test
     void enqueue_shouldCreateJobWithPendingStatus() {
