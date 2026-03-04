@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import java.util.HashMap;
 @Service
 @RequiredArgsConstructor
 public class JobService {
@@ -41,5 +43,19 @@ public class JobService {
 
     public List<Job> getJobsByStatus(JobStatus status) {
         return jobRepository.findByStatus(status);
+    }
+
+    public Map<String, Long> getStats() {
+        Map<String, Long> stats = new HashMap<>();
+        for (JobStatus status : JobStatus.values()) {
+            stats.put(status.name(), 0L);
+        }
+        jobRepository.countByStatus()
+                .forEach(row -> {
+                    String status = row[0].toString();
+                    Long count = (Long) row[1];
+                    stats.put(status, count);
+                });
+        return stats;
     }
 }

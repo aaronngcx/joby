@@ -2,6 +2,7 @@ package com.example.joby.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,7 +11,8 @@ import java.util.concurrent.Executors;
 public class ThreadPoolConfig {
 
     @Bean
-    public ExecutorService jobExecutorService() {
-        return Executors.newFixedThreadPool(5); // 5 concurrent workers
+    public ExecutorService jobExecutorService(
+            @Value("${joby.worker.threads:5}") int threads) {
+        return Executors.newFixedThreadPool(threads);
     }
 }

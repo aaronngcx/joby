@@ -45,14 +45,7 @@ public class JobController {
     @Operation(summary = "Get queue stats")
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Long>> getStats() {
-        Map<String, Long> stats = Map.of(
-                "pending", (long) jobService.getJobsByStatus(JobStatus.PENDING).size(),
-                "running", (long) jobService.getJobsByStatus(JobStatus.RUNNING).size(),
-                "done", (long) jobService.getJobsByStatus(JobStatus.DONE).size(),
-                "failed", (long) jobService.getJobsByStatus(JobStatus.FAILED).size(),
-                "dead", (long) jobService.getJobsByStatus(JobStatus.DEAD).size()
-        );
-        return ResponseEntity.ok(stats);
+        return ResponseEntity.ok(jobService.getStats());
     }
 
     public record EnqueueRequest(

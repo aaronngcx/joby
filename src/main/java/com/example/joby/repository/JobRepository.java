@@ -26,6 +26,9 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query("UPDATE Job j SET j.status = 'RUNNING', j.updatedAt = :now WHERE j.id = :id AND j.status = 'PENDING'")
     int claimJob(@Param("id") Long id, @Param("now") LocalDateTime now);
 
+    @Query("SELECT j.status, COUNT(j) FROM Job j GROUP BY j.status")
+    List<Object[]> countByStatus();
+
 
 }
 
