@@ -75,6 +75,15 @@ jobs:
         with:
           name: test-results
           path: build/reports/tests/test/
+      - name: Debug token
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "TOKEN IS EMPTY"
+          else
+            echo "TOKEN EXISTS with length ${#RAILWAY_TOKEN}"
+          fi
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
